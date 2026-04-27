@@ -13,5 +13,11 @@ splunk_password: "{{ lookup('env', 'SPLUNK_PASSWORD') }}"
 # EDA connection
 eda_webhook_url: "{{ lookup('env', 'EDA_WEBHOOK_URL') }}"
 
+# Bastion SSH (required for network device access)
+bastion_host: "{{ lookup('env', 'BASTION_HOST') }}"
+bastion_port: "{{ lookup('env', 'BASTION_PORT') | default('22') }}"
+bastion_user: "{{ lookup('env', 'BASTION_USER') | default('lab-user') }}"
+bastion_password: "{{ lookup('env', 'BASTION_PASSWORD') }}"
+
 # Workshop defaults
 organization: "Default"

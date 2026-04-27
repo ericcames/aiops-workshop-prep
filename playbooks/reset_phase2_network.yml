@@ -11,8 +11,12 @@
           interface tunnel0
            no shutdown
       vars:
-        ansible_host: cisco-rtr1
+        ansible_host: "cisco-rtr1"
         ansible_user: "{{ lookup('env', 'NETWORK_USERNAME') | default('admin') }}"
         ansible_password: "{{ lookup('env', 'NETWORK_PASSWORD') | default('ansible123!') }}"
         ansible_network_os: cisco.ios.ios
         ansible_connection: network_cli
+        ansible_ssh_common_args: >-
+          -o ProxyCommand='sshpass -p {{ bastion_password }} ssh -p {{ bastion_port }}
+          -o StrictHostKeyChecking=no {{ bastion_user }}@{{ bastion_host }} -W %h:%p'
+          -o StrictHostKeyChecking=no
