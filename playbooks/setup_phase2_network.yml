@@ -18,6 +18,7 @@
         validate_certs: "{{ validate_certs }}"
         status_code: 200
       register: splunk_login_page
+      no_log: true
 
     - name: Splunk auth — post credentials to establish session
       ansible.builtin.uri:
@@ -35,6 +36,7 @@
           Cookie: "{{ splunk_login_page.cookies | dict2items | map(attribute='key') | zip(splunk_login_page.cookies | dict2items | map(attribute='value')) | map('join', '=') | join('; ') }}"
         status_code: 200
       register: splunk_session
+      no_log: true
 
     - name: Configure Splunk TCP data input (port 5514, cisco:ios)
       ansible.builtin.uri:

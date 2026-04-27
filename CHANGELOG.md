@@ -42,5 +42,10 @@ All notable changes to this project will be documented in this file.
   - No physical state to restore (simulate templates leave no lasting changes)
 - `playbooks/preflight.yml` — added 4 Windows job template checks
 
+### Security Fixes
+- `setup_phase2_network.yml` — added `no_log: true` to both Splunk auth tasks to prevent session tokens appearing in logs (closes #2)
+- `reset_phase2_network.yml` — replaced `sshpass -p` with `sshpass -f <tempfile>` so bastion password is not visible in process list; temp file cleaned up in `always:` block (closes #3)
+- `reset_phase2_network.yml` — replaced `| default('ansible123!')` with `| mandatory` on `NETWORK_PASSWORD` to fail fast instead of silently using a hardcoded fallback (closes #4)
+
 ### Open Issues
 - [#1](https://github.com/ericcames/aiops-workshop-prep/issues/1) — Replace Splunk web auth CSRF workaround with SSH tunnel to port 8089 via bastion
