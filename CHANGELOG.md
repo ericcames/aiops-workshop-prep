@@ -11,15 +11,13 @@ All notable changes to this project will be documented in this file.
 - Playbook stubs for preflight, setup, and reset across all three phases
 - Project plan document (docs/aiops-workshop-prep-plan.docx)
 
-### Phase 1 — Apache AIOps
+### Phase 1 — Apache AIOps ✅
 - `setup_phase1_apache.yml` — complete and tested against live RHDP
+  - Creates "AI Insights and Lightspeed prompt generation" workflow (4 nodes)
+  - Creates "Remediation Workflow" (4 nodes)
+  - Runs "✅ Restore Apache" to return environment to known-good state
 
-### Phase 3 — Windows AIOps
-- `setup_phase3_windows.yml` — verifies 4 Windows job templates exist and "Windows Events" EDA activation is Running
-- `reset_phase3_windows.yml` — re-verifies "Windows Events" EDA activation is Running (no physical state to restore)
-- `playbooks/preflight.yml` — added 4 Windows job template checks
-
-### Phase 2 — Network AIOps
+### Phase 2 — Network AIOps ✅
 - `setup_phase2_network.yml` — complete and tested against live RHDP
   - Three-step Splunk web auth flow (GET login → POST login → POST Manager endpoint)
     required because OCP only exposes Splunk web port; port 8089 not externally reachable
@@ -32,3 +30,17 @@ All notable changes to this project will be documented in this file.
 - `collections/requirements.yml` — added `ansible.netcommon` and `cisco.ios`
 - `inventories/rhdp-sample/group_vars/all.yml` — added `eda_webhook_url`, bastion SSH vars
 - `playbooks/preflight.yml` — added "Network Router Setup" job template check
+
+### Phase 3 — Windows AIOps ✅
+- `setup_phase3_windows.yml` — complete and tested against live RHDP
+  - Verifies 4 Windows job templates exist: "Simulate AD Account Creation",
+    "Simulate Windows Firewall Toggle", "Windows: Create Mattermost Ticket",
+    "Windows AI: Analyze and Ticket"
+  - Verifies "Windows Events" EDA rulebook activation is Running
+- `reset_phase3_windows.yml` — complete and tested against live RHDP
+  - Re-verifies "Windows Events" EDA activation is Running
+  - No physical state to restore (simulate templates leave no lasting changes)
+- `playbooks/preflight.yml` — added 4 Windows job template checks
+
+### Open Issues
+- [#1](https://github.com/ericcames/aiops-workshop-prep/issues/1) — Replace Splunk web auth CSRF workaround with SSH tunnel to port 8089 via bastion

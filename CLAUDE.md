@@ -32,9 +32,15 @@ The web port has CSRF protection. Solution is the Manager controller endpoint at
 which accepts `splunk_form_key` in the POST body and strips it before calling splunkd.
 Basic auth and Bearer tokens do not work via the web port.
 
-### Phase 3 — Windows AIOps ⬜ PLACEHOLDER
-Both setup and reset playbooks are debug message placeholders.
-Need to review the Windows module content from the showroom before implementing.
+### Phase 3 — Windows AIOps ✅ COMPLETE AND TESTED
+`playbooks/setup_phase3_windows.yml` — working against live RHDP, all 2 tasks pass:
+- Verifies all 4 Windows job templates exist: "Simulate AD Account Creation", "Simulate Windows Firewall Toggle", "Windows: Create Mattermost Ticket", "Windows AI: Analyze and Ticket"
+- Verifies "Windows Events" EDA rulebook activation is Running
+
+`playbooks/reset_phase3_windows.yml` — working against live RHDP:
+- Re-verifies "Windows Events" EDA activation is Running (nothing physically breaks during simulate templates — no state to restore)
+
+**Windows AIOps note:** Infrastructure (Windows Server, Winlogbeat, Kafka) is pre-provisioned by RHDP. Setup is verification-only. Demo entry points are "Simulate AD Account Creation" (triggers Mattermost ticket) and "Simulate Windows Firewall Toggle" (triggers AI analysis + enriched ticket).
 
 ## Running the Playbooks
 
@@ -60,10 +66,12 @@ ansible-playbook -i inventories/rhdp-sample/ playbooks/preflight.yml
 # Setup
 ansible-playbook -i inventories/rhdp-sample/ playbooks/setup_phase1_apache.yml
 ansible-playbook -i inventories/rhdp-sample/ playbooks/setup_phase2_network.yml
+ansible-playbook -i inventories/rhdp-sample/ playbooks/setup_phase3_windows.yml
 
 # Reset between sessions
 ansible-playbook -i inventories/rhdp-sample/ playbooks/reset_phase1_apache.yml
 ansible-playbook -i inventories/rhdp-sample/ playbooks/reset_phase2_network.yml
+ansible-playbook -i inventories/rhdp-sample/ playbooks/reset_phase3_windows.yml
 ```
 
 ## Collections
@@ -97,7 +105,7 @@ The upstream `ansible-tmm/aiops-summitlab` repo has:
 |---------|-------------|--------------|
 | Apache AIOps | Run "❌ Break Apache" | Web App rulebook → AI Insights workflow |
 | Network AIOps | SSH cisco-rtr1, shut tunnel0 | ospf-neighbor Splunk alert → OSPF Neighbor rulebook → Network-AIOps-Workflow |
-| Windows AIOps | TBD | TBD |
+| Windows AIOps | Launch "Simulate AD Account Creation" or "Simulate Windows Firewall Toggle" | Windows Events rulebook → "Windows: Create Mattermost Ticket" or "Windows AI: Analyze and Ticket" |
 
 ## Conventions
 

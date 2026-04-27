@@ -80,7 +80,7 @@ cp -r inventories/rhdp-sample/ inventories/rhdp-<customer>/
 |---|---|---|---|
 | Phase 1 | Apache AIOps | ✅ Tested | Builds AI Insights and Remediation workflows |
 | Phase 2 | Network AIOps | ✅ Tested | Splunk TCP input, Network Router Setup job, Splunk alert → EDA webhook |
-| Phase 3 | Windows AIOps | ⬜ Placeholder | Not yet implemented |
+| Phase 3 | Windows AIOps | ✅ Tested | Verifies Windows job templates and EDA activation |
 
 ## License
 
