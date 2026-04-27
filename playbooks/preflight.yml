@@ -1,0 +1,31 @@
+---
+- name: Preflight — validate upstream lab is deployed
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+
+    - name: Verify AAP is reachable
+      ansible.builtin.uri:
+        url: "{{ controller_host }}/api/v2/ping/"
+        validate_certs: "{{ validate_certs }}"
+        status_code: 200
+
+    - name: Check required job templates exist
+      ansible.controller.job_template:
+        name: "{{ item }}"
+        state: present
+        controller_host: "{{ controller_host }}"
+        controller_username: "{{ controller_username }}"
+        controller_password: "{{ controller_password }}"
+        validate_certs: "{{ validate_certs }}"
+      check_mode: true
+      loop:
+        - "❌ Break Apache"
+        - "⚙️ Apache Service Status Check"
+        - "🤖 RHEL AI: Analyze Incident"
+        - "📣 Notify via Mattermost"
+        - "⚙️ Build Ansible Lightspeed Job Template"
+        - "🧾 Commit Fix to Gitea"
+        - "⚙️ Build HTTPD Remediation Template"
+        - "✅ Restore Apache"

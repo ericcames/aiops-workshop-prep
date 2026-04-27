@@ -1,0 +1,10 @@
+---
+- name: Phase 3 setup — Windows AIOps
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+
+    - name: Placeholder — Windows AIOps setup tasks TBD
+      ansible.builtin.debug:
+        msg: "Phase 3 setup not yet implemented — review Windows module content first"

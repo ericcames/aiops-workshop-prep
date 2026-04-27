@@ -1,0 +1,15 @@
+---
+- name: Phase 1 reset — return Apache to known-good demo-ready state
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+
+    - name: Run Restore Apache job template
+      ansible.controller.job_launch:
+        job_template: "✅ Restore Apache"
+        controller_host: "{{ controller_host }}"
+        controller_username: "{{ controller_username }}"
+        controller_password: "{{ controller_password }}"
+        validate_certs: "{{ validate_certs }}"
+        wait: true

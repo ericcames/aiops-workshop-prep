@@ -1,0 +1,5 @@
+docs/dev-environment.md
+collections/ansible_collections/
+*.retry
+*.pyc
+__pycache__/

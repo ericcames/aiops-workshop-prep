@@ -1,0 +1,105 @@
+---
+- name: Phase 1 setup — Apache AIOps workflows
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+
+    - name: Create AI Insights and Lightspeed prompt generation workflow
+      ansible.controller.workflow_job_template:
+        name: "AI Insights and Lightspeed prompt generation"
+        organization: "{{ organization }}"
+        destroy_current_nodes: true
+        workflow_nodes:
+          - identifier: apache-status-check
+            unified_job_template:
+              name: "⚙️ Apache Service Status Check"
+              organization:
+                name: "{{ organization }}"
+              type: job_template
+            related:
+              success_nodes:
+                - identifier: rhel-ai-analyze
+          - identifier: rhel-ai-analyze
+            unified_job_template:
+              name: "🤖 RHEL AI: Analyze Incident"
+              organization:
+                name: "{{ organization }}"
+              type: job_template
+            related:
+              success_nodes:
+                - identifier: notify-mattermost
+          - identifier: notify-mattermost
+            unified_job_template:
+              name: "📣 Notify via Mattermost"
+              organization:
+                name: "{{ organization }}"
+              type: job_template
+            related:
+              success_nodes:
+                - identifier: build-lightspeed-template
+          - identifier: build-lightspeed-template
+            unified_job_template:
+              name: "⚙️ Build Ansible Lightspeed Job Template"
+              organization:
+                name: "{{ organization }}"
+              type: job_template
+        state: present
+        controller_host: "{{ controller_host }}"
+        controller_username: "{{ controller_username }}"
+        controller_password: "{{ controller_password }}"
+        validate_certs: "{{ validate_certs }}"
+
+    - name: Create Remediation Workflow
+      ansible.controller.workflow_job_template:
+        name: "Remediation Workflow"
+        organization: "{{ organization }}"
+        destroy_current_nodes: true
+        workflow_nodes:
+          - identifier: remediation-generator
+            unified_job_template:
+              name: "🧠 Lightspeed Remediation Playbook Generator"
+              organization:
+                name: "{{ organization }}"
+              type: job_template
+            related:
+              success_nodes:
+                - identifier: commit-fix
+          - identifier: commit-fix
+            unified_job_template:
+              name: "🧾 Commit Fix to Gitea"
+              organization:
+                name: "{{ organization }}"
+              type: job_template
+            related:
+              success_nodes:
+                - identifier: project-sync
+          - identifier: project-sync
+            unified_job_template:
+              name: "Lightspeed-Playbooks"
+              organization:
+                name: "{{ organization }}"
+              type: project
+            related:
+              success_nodes:
+                - identifier: build-httpd-remediation
+          - identifier: build-httpd-remediation
+            unified_job_template:
+              name: "⚙️ Build HTTPD Remediation Template"
+              organization:
+                name: "{{ organization }}"
+              type: job_template
+        state: present
+        controller_host: "{{ controller_host }}"
+        controller_username: "{{ controller_username }}"
+        controller_password: "{{ controller_password }}"
+        validate_certs: "{{ validate_certs }}"
+
+    - name: Ensure Apache is in known-good state
+      ansible.controller.job_launch:
+        job_template: "✅ Restore Apache"
+        controller_host: "{{ controller_host }}"
+        controller_username: "{{ controller_username }}"
+        controller_password: "{{ controller_password }}"
+        validate_certs: "{{ validate_certs }}"
+        wait: true

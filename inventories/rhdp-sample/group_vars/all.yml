@@ -1,0 +1,14 @@
+---
+# AAP connection — set via environment variables, never hardcode here
+controller_host: "{{ lookup('env', 'CONTROLLER_HOST') }}"
+controller_username: "{{ lookup('env', 'CONTROLLER_USERNAME') }}"
+controller_password: "{{ lookup('env', 'CONTROLLER_PASSWORD') }}"
+validate_certs: false
+
+# Splunk connection
+splunk_host: "{{ lookup('env', 'SPLUNK_HOST') }}"
+splunk_username: "{{ lookup('env', 'SPLUNK_USERNAME') }}"
+splunk_password: "{{ lookup('env', 'SPLUNK_PASSWORD') }}"
+
+# Workshop defaults
+organization: "Default"

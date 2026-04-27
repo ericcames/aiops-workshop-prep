@@ -1,0 +1,65 @@
+---
+- name: Phase 2 setup — Network AIOps (Splunk + Cisco + EDA)
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+
+    - name: Configure Splunk TCP data input (port 5514, cisco:ios)
+      ansible.builtin.uri:
+        url: "{{ splunk_host }}/services/data/inputs/tcp/raw"
+        method: POST
+        user: "{{ splunk_username }}"
+        password: "{{ splunk_password }}"
+        force_basic_auth: true
+        validate_certs: "{{ validate_certs }}"
+        body_format: form-urlencoded
+        body:
+          name: "5514"
+          sourcetype: "cisco:ios"
+          index: "main"
+        status_code: [200, 201, 409]
+
+    - name: Run Network-Router-Setup job template
+      ansible.controller.job_launch:
+        job_template: "Network-Router-Setup"
+        controller_host: "{{ controller_host }}"
+        controller_username: "{{ controller_username }}"
+        controller_password: "{{ controller_password }}"
+        validate_certs: "{{ validate_certs }}"
+        wait: true
+
+    - name: Create ospf-neighbor Splunk alert with EDA webhook
+      ansible.builtin.uri:
+        url: "{{ splunk_host }}/services/saved/searches"
+        method: POST
+        user: "{{ splunk_username }}"
+        password: "{{ splunk_password }}"
+        force_basic_auth: true
+        validate_certs: "{{ validate_certs }}"
+        body_format: form-urlencoded
+        body:
+          name: "ospf-neighbor"
+          search: "index=* \"%OSPF-5-ADJCHG: Process 1, Nbr 192.168.2.2 on Tunnel0 from FULL to DOWN\""
+          is_scheduled: "1"
+          cron_schedule: "* * * * *"
+          dispatch.earliest_time: "rt"
+          dispatch.latest_time: "rt"
+          alert_type: "always"
+          alert.severity: "3"
+          actions: "webhook"
+          action.webhook.param.url: "{{ eda_webhook_url }}"
+        status_code: [200, 201, 409]
+
+    - name: Verify EDA OSPF Neighbor rulebook activation is Running
+      ansible.builtin.uri:
+        url: "{{ controller_host }}/api/eda/v1/activations/?name=OSPF+Neighbor"
+        user: "{{ controller_username }}"
+        password: "{{ controller_password }}"
+        force_basic_auth: true
+        validate_certs: "{{ validate_certs }}"
+        status_code: 200
+      register: eda_check
+      failed_when: >
+        eda_check.json.results | length == 0 or
+        eda_check.json.results[0].status != 'running'

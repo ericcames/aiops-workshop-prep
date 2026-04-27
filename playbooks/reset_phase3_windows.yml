@@ -1,0 +1,10 @@
+---
+- name: Phase 3 reset — return Windows environment to known-good demo-ready state
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+
+    - name: Placeholder — Windows AIOps reset tasks TBD
+      ansible.builtin.debug:
+        msg: "Phase 3 reset not yet implemented — review Windows module content first"
