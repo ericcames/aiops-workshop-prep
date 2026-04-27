@@ -16,14 +16,21 @@ The upstream repo must be deployed to RHDP before running anything here.
 
 `playbooks/reset_phase1_apache.yml` — runs "✅ Restore Apache", not yet tested
 
-### Phase 2 — Network AIOps (Splunk + Cisco + EDA) ⬜ STUB ONLY
-`playbooks/setup_phase2_network.yml` — logic written but NOT yet tested:
-- Configures Splunk TCP input (port 5514, cisco:ios) via REST API
-- Launches "Network-Router-Setup" job template
+### Phase 2 — Network AIOps (Splunk + Cisco + EDA) ✅ COMPLETE AND TESTED
+`playbooks/setup_phase2_network.yml` — working against live RHDP, all 6 tasks pass:
+- Authenticates to Splunk via 3-step web auth (GET login → POST login → POST Manager endpoint)
+- Creates Splunk TCP input port 5514 / `cisco:ios`
+- Launches "Network Router Setup" job template
 - Creates Splunk "ospf-neighbor" real-time alert → EDA webhook
 - Verifies EDA "OSPF Neighbor" rulebook activation is Running
 
-`playbooks/reset_phase2_network.yml` — stub, NOT yet tested
+`playbooks/reset_phase2_network.yml` — written but NOT yet tested:
+- Restores tunnel0 on cisco-rtr1 via `ansible.netcommon.cli_config` through bastion ProxyCommand
+
+**Splunk note:** OCP only exposes Splunk web port (443); port 8089 REST API is not reachable externally.
+The web port has CSRF protection. Solution is the Manager controller endpoint at `/en-US/manager/`
+which accepts `splunk_form_key` in the POST body and strips it before calling splunkd.
+Basic auth and Bearer tokens do not work via the web port.
 
 ### Phase 3 — Windows AIOps ⬜ PLACEHOLDER
 Both setup and reset playbooks are debug message placeholders.
@@ -38,6 +45,14 @@ Set environment variables before running:
 export CONTROLLER_HOST=<aap-url>
 export CONTROLLER_USERNAME=admin
 export CONTROLLER_PASSWORD=<password>
+export SPLUNK_HOST=<splunk-url>
+export SPLUNK_USERNAME=admin
+export SPLUNK_PASSWORD=<password>
+export EDA_WEBHOOK_URL=<eda-webhook-url>
+export BASTION_HOST=<bastion-host>
+export BASTION_PORT=<bastion-port>
+export BASTION_USER=lab-user
+export BASTION_PASSWORD=<password>
 
 # Validate upstream lab is deployed
 ansible-playbook -i inventories/rhdp-sample/ playbooks/preflight.yml
@@ -48,6 +63,7 @@ ansible-playbook -i inventories/rhdp-sample/ playbooks/setup_phase2_network.yml
 
 # Reset between sessions
 ansible-playbook -i inventories/rhdp-sample/ playbooks/reset_phase1_apache.yml
+ansible-playbook -i inventories/rhdp-sample/ playbooks/reset_phase2_network.yml
 ```
 
 ## Collections

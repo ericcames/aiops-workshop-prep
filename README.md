@@ -15,8 +15,37 @@ This repo targets a running instance of the upstream lab. The upstream repo must
 
 - A running RHDP AIOps workshop environment
 - Ansible installed locally
-- Collections installed: `ansible-galaxy collection install -r collections/requirements.yml`
-- Credentials populated in `docs/dev-environment.md` (see `docs/dev-environment.md.example` — never commit this file)
+- Collections installed (requires Automation Hub token in `~/.ansible/ansible.cfg`):
+  ```bash
+  ANSIBLE_CONFIG=~/.ansible/ansible.cfg \
+    ansible-galaxy collection install -r collections/requirements.yml -p ./collections
+  ```
+- Credentials populated in `docs/dev-environment.md` (gitignored — never commit)
+
+## Environment Variables
+
+Set these before running any playbook:
+
+```bash
+# AAP
+export CONTROLLER_HOST=<aap-url>
+export CONTROLLER_USERNAME=admin
+export CONTROLLER_PASSWORD=<password>
+
+# Splunk (Phase 2)
+export SPLUNK_HOST=<splunk-url>
+export SPLUNK_USERNAME=admin
+export SPLUNK_PASSWORD=<password>
+
+# EDA webhook (Phase 2)
+export EDA_WEBHOOK_URL=<eda-webhook-url>
+
+# Bastion SSH — required to reach cisco-rtr1 for Phase 2 reset
+export BASTION_HOST=<bastion-host>
+export BASTION_PORT=<bastion-port>
+export BASTION_USER=lab-user
+export BASTION_PASSWORD=<password>
+```
 
 ## Usage
 
@@ -39,22 +68,19 @@ ansible-playbook -i inventories/rhdp-<customer>/ playbooks/reset_phase3_windows.
 
 ## Inventory Setup
 
-Copy the sample inventory for each new RHDP environment:
+Copy the sample inventory for each new RHDP environment and set the environment variables above:
 
 ```bash
 cp -r inventories/rhdp-sample/ inventories/rhdp-<customer>/
-export CONTROLLER_HOST=<aap-url>
-export CONTROLLER_USERNAME=admin
-export CONTROLLER_PASSWORD=<password>
 ```
 
 ## Phases
 
-| Phase | Section | What it automates |
-|---|---|---|
-| Phase 1 | Apache AIOps | Builds AI Insights and Remediation workflows |
-| Phase 2 | Network AIOps | Configures Splunk, Cisco routers, EDA |
-| Phase 3 | Windows AIOps | Sets up Windows EDA, Mattermost tickets |
+| Phase | Section | Status | What it automates |
+|---|---|---|---|
+| Phase 1 | Apache AIOps | ✅ Tested | Builds AI Insights and Remediation workflows |
+| Phase 2 | Network AIOps | ✅ Tested | Splunk TCP input, Network Router Setup job, Splunk alert → EDA webhook |
+| Phase 3 | Windows AIOps | ⬜ Placeholder | Not yet implemented |
 
 ## License
 
