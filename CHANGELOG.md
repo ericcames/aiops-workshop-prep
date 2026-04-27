@@ -14,6 +14,11 @@ All notable changes to this project will be documented in this file.
 ### Phase 1 — Apache AIOps
 - `setup_phase1_apache.yml` — complete and tested against live RHDP
 
+### Phase 3 — Windows AIOps
+- `setup_phase3_windows.yml` — verifies 4 Windows job templates exist and "Windows Events" EDA activation is Running
+- `reset_phase3_windows.yml` — re-verifies "Windows Events" EDA activation is Running (no physical state to restore)
+- `playbooks/preflight.yml` — added 4 Windows job template checks
+
 ### Phase 2 — Network AIOps
 - `setup_phase2_network.yml` — complete and tested against live RHDP
   - Three-step Splunk web auth flow (GET login → POST login → POST Manager endpoint)

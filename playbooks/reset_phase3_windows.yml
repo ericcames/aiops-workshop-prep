@@ -1,10 +1,19 @@
 ---
-- name: Phase 3 reset — return Windows environment to known-good demo-ready state
+- name: Phase 3 reset — verify Windows environment is demo-ready
   hosts: localhost
   connection: local
   gather_facts: false
   tasks:
 
-    - name: Placeholder — Windows AIOps reset tasks TBD
-      ansible.builtin.debug:
-        msg: "Phase 3 reset not yet implemented — review Windows module content first"
+    - name: Verify Windows Events EDA rulebook activation is Running
+      ansible.builtin.uri:
+        url: "{{ controller_host }}/api/eda/v1/activations/?name=Windows+Events"
+        user: "{{ controller_username }}"
+        password: "{{ controller_password }}"
+        force_basic_auth: true
+        validate_certs: "{{ validate_certs }}"
+        status_code: 200
+      register: eda_check
+      failed_when: >
+        eda_check.json.results | length == 0 or
+        eda_check.json.results[0].status != 'running'

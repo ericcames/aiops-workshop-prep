@@ -5,6 +5,30 @@
   gather_facts: false
   tasks:
 
-    - name: Placeholder — Windows AIOps setup tasks TBD
-      ansible.builtin.debug:
-        msg: "Phase 3 setup not yet implemented — review Windows module content first"
+    - name: Verify required Windows job templates exist
+      ansible.controller.job_template:
+        name: "{{ item }}"
+        state: present
+        controller_host: "{{ controller_host }}"
+        controller_username: "{{ controller_username }}"
+        controller_password: "{{ controller_password }}"
+        validate_certs: "{{ validate_certs }}"
+      check_mode: true
+      loop:
+        - "Simulate AD Account Creation"
+        - "Simulate Windows Firewall Toggle"
+        - "Windows: Create Mattermost Ticket"
+        - "Windows AI: Analyze and Ticket"
+
+    - name: Verify Windows Events EDA rulebook activation is Running
+      ansible.builtin.uri:
+        url: "{{ controller_host }}/api/eda/v1/activations/?name=Windows+Events"
+        user: "{{ controller_username }}"
+        password: "{{ controller_password }}"
+        force_basic_auth: true
+        validate_certs: "{{ validate_certs }}"
+        status_code: 200
+      register: eda_check
+      failed_when: >
+        eda_check.json.results | length == 0 or
+        eda_check.json.results[0].status != 'running'

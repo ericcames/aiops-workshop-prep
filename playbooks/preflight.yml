@@ -30,3 +30,7 @@
         - "⚙️ Build HTTPD Remediation Template"
         - "✅ Restore Apache"
         - "Network Router Setup"
+        - "Simulate AD Account Creation"
+        - "Simulate Windows Firewall Toggle"
+        - "Windows: Create Mattermost Ticket"
+        - "Windows AI: Analyze and Ticket"
