@@ -10,5 +10,8 @@ splunk_host: "{{ lookup('env', 'SPLUNK_HOST') }}"
 splunk_username: "{{ lookup('env', 'SPLUNK_USERNAME') }}"
 splunk_password: "{{ lookup('env', 'SPLUNK_PASSWORD') }}"
 
+# EDA connection
+eda_webhook_url: "{{ lookup('env', 'EDA_WEBHOOK_URL') }}"
+
 # Workshop defaults
 organization: "Default"
