@@ -5,24 +5,59 @@
   gather_facts: false
   tasks:
 
-    - name: Configure Splunk TCP data input (port 5514, cisco:ios)
+    # Splunk Web on this OCP deployment only exposes port 443 (web UI).
+    # Port 8089 (management REST API) is not reachable externally.
+    # The web UI has CSRF protection. Workaround: use the Manager controller
+    # endpoint (/en-US/manager/...) which handles CSRF stripping internally,
+    # but requires a full web session (3-step: GET login → POST login → POST action).
+
+    - name: Splunk auth — get login page and initial CSRF cookie (cval)
       ansible.builtin.uri:
-        url: "{{ splunk_host }}/services/data/inputs/tcp/raw"
+        url: "{{ splunk_host }}/en-US/account/login"
+        method: GET
+        validate_certs: "{{ validate_certs }}"
+        status_code: 200
+      register: splunk_login_page
+
+    - name: Splunk auth — post credentials to establish session
+      ansible.builtin.uri:
+        url: "{{ splunk_host }}/en-US/account/login"
         method: POST
-        user: "{{ splunk_username }}"
-        password: "{{ splunk_password }}"
-        force_basic_auth: true
         validate_certs: "{{ validate_certs }}"
         body_format: form-urlencoded
         body:
+          username: "{{ splunk_username }}"
+          password: "{{ splunk_password }}"
+          set_has_logged_in: "false"
+          cval: "{{ (splunk_login_page.cookies | dict2items | selectattr('key', 'equalto', 'cval') | list | first).value }}"
+          return_to: "/en-US/"
+        headers:
+          Cookie: "{{ splunk_login_page.cookies | dict2items | map(attribute='key') | zip(splunk_login_page.cookies | dict2items | map(attribute='value')) | map('join', '=') | join('; ') }}"
+        status_code: 200
+      register: splunk_session
+
+    - name: Configure Splunk TCP data input (port 5514, cisco:ios)
+      ansible.builtin.uri:
+        url: "{{ splunk_host }}/en-US/manager/search/data/inputs/tcp/raw"
+        method: POST
+        validate_certs: "{{ validate_certs }}"
+        body_format: form-urlencoded
+        body:
+          splunk_form_key: "{{ (splunk_session.cookies | dict2items | selectattr('key', 'equalto', 'splunkweb_csrf_token_8000') | list | first).value }}"
           name: "5514"
           sourcetype: "cisco:ios"
           index: "main"
-        status_code: [200, 201, 409]
+        headers:
+          Cookie: "{{ splunk_session.cookies | dict2items | map(attribute='key') | zip(splunk_session.cookies | dict2items | map(attribute='value')) | map('join', '=') | join('; ') }}"
+        status_code: 200
+      register: splunk_tcp_result
+      failed_when:
+        - splunk_tcp_result.json.status is defined
+        - splunk_tcp_result.json.status != 'OK'
 
     - name: Run Network-Router-Setup job template
       ansible.controller.job_launch:
-        job_template: "Network-Router-Setup"
+        job_template: "Network Router Setup"
         controller_host: "{{ controller_host }}"
         controller_username: "{{ controller_username }}"
         controller_password: "{{ controller_password }}"
@@ -31,14 +66,12 @@
 
     - name: Create ospf-neighbor Splunk alert with EDA webhook
       ansible.builtin.uri:
-        url: "{{ splunk_host }}/services/saved/searches"
+        url: "{{ splunk_host }}/en-US/manager/search/saved/searches"
         method: POST
-        user: "{{ splunk_username }}"
-        password: "{{ splunk_password }}"
-        force_basic_auth: true
         validate_certs: "{{ validate_certs }}"
         body_format: form-urlencoded
         body:
+          splunk_form_key: "{{ (splunk_session.cookies | dict2items | selectattr('key', 'equalto', 'splunkweb_csrf_token_8000') | list | first).value }}"
           name: "ospf-neighbor"
           search: "index=* \"%OSPF-5-ADJCHG: Process 1, Nbr 192.168.2.2 on Tunnel0 from FULL to DOWN\""
           is_scheduled: "1"
@@ -49,7 +82,13 @@
           alert.severity: "3"
           actions: "webhook"
           action.webhook.param.url: "{{ eda_webhook_url }}"
-        status_code: [200, 201, 409]
+        headers:
+          Cookie: "{{ splunk_session.cookies | dict2items | map(attribute='key') | zip(splunk_session.cookies | dict2items | map(attribute='value')) | map('join', '=') | join('; ') }}"
+        status_code: 200
+      register: splunk_alert_result
+      failed_when:
+        - splunk_alert_result.json.status is defined
+        - splunk_alert_result.json.status != 'OK'
 
     - name: Verify EDA OSPF Neighbor rulebook activation is Running
       ansible.builtin.uri:
