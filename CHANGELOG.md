@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Docs (issue #7)
+- `images/rhdp-catalog-item.png` — screenshot of the RHDP catalog item embedded in README
+- `README.md` — Getting Started section (Step 1 order catalog item → Step 2 clone + `claude .` → Step 3 populate credentials → Step 4 `/aiops-setup`); correct showroom section names to Part 1/2/3
+- `docs/dev-environment.md.example` — template with all required fields and placeholder values
+- `docs/troubleshooting.md` — 10 common failure modes with diagnosis and fix steps
+- `README.md` — add RHDP catalog item name, workshop module map, `dev-environment.md.example` setup step, link to troubleshooting guide
+- `CLAUDE.md` — add open issues table, RHDP catalog item, Claude Code skills section; fix Phase 2 reset status (now tested); document Paramiko ProxyCommand limitation
+
 ### Fixed
 - `reset_phase2_network.yml` — replace `ansible.netcommon.cli_config` (Paramiko fails to handle ProxyCommand and cannot resolve internal hostname `cisco-rtr1`) with `ansible.builtin.shell` + `sshpass -e` piping IOS config commands directly over SSH via the bastion ProxyCommand (fixes issue #9)
 - `inventories/rhdp-sample/group_vars/all.yml` — add `network_host`, `network_username`, `network_password` env var lookups (required for Phase 2 reset)

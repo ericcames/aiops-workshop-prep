@@ -4,7 +4,22 @@
 
 Automates the setup of the [ansible-tmm/aiops-summitlab](https://github.com/ansible-tmm/aiops-summitlab)
 AIOps workshop so each demo section is ready to run without manual steps.
+
+**RHDP Catalog Item:** "Introduction to AI-Driven Ansible Automation: Self-healing, Observability-Driven AIOps" (provided by RHDP)
+
 The upstream repo must be deployed to RHDP before running anything here.
+
+## Open Issues
+
+Track work items at https://github.com/ericcames/aiops-workshop-prep/issues
+
+| # | Title | Priority |
+|---|-------|----------|
+| #5 | validate_certs: false — should validate in prod | Low |
+| #6 | SSH host key checking disabled — should use known_hosts | Low |
+
+Issues #2, #3, #4 (credential exposure) closed in commit f877947.
+Issues #8 (Claude Code skills), #9 (Phase 2 reset Paramiko bug) closed in PR #10.
 
 ## Current State
 
@@ -14,7 +29,7 @@ The upstream repo must be deployed to RHDP before running anything here.
 - Creates "Remediation Workflow" (4 nodes)
 - Runs "✅ Restore Apache" to return environment to known-good state
 
-`playbooks/reset_phase1_apache.yml` — runs "✅ Restore Apache", not yet tested
+`playbooks/reset_phase1_apache.yml` — ✅ tested: runs "✅ Restore Apache"
 
 ### Phase 2 — Network AIOps (Splunk + Cisco + EDA) ✅ COMPLETE AND TESTED
 `playbooks/setup_phase2_network.yml` — working against live RHDP, all 6 tasks pass:
@@ -24,13 +39,16 @@ The upstream repo must be deployed to RHDP before running anything here.
 - Creates Splunk "ospf-neighbor" real-time alert → EDA webhook
 - Verifies EDA "OSPF Neighbor" rulebook activation is Running
 
-`playbooks/reset_phase2_network.yml` — written but NOT yet tested:
-- Restores tunnel0 on cisco-rtr1 via `ansible.netcommon.cli_config` through bastion ProxyCommand
+`playbooks/reset_phase2_network.yml` — ✅ tested: restores tunnel0 on cisco-rtr1 via `ansible.builtin.shell` + `sshpass -e` piping IOS config commands over SSH through the bastion ProxyCommand.
 
 **Splunk note:** OCP only exposes Splunk web port (443); port 8089 REST API is not reachable externally.
 The web port has CSRF protection. Solution is the Manager controller endpoint at `/en-US/manager/`
 which accepts `splunk_form_key` in the POST body and strips it before calling splunkd.
 Basic auth and Bearer tokens do not work via the web port.
+
+**Phase 2 reset note:** `ansible.netcommon.cli_config` with Paramiko cannot resolve the internal
+`cisco-rtr1` hostname and does not apply the SSH ProxyCommand. Use `ansible.builtin.shell` with
+`sshpass -e` instead (already implemented).
 
 ### Phase 3 — Windows AIOps ✅ COMPLETE AND TESTED
 `playbooks/setup_phase3_windows.yml` — working against live RHDP, all 2 tasks pass:
@@ -101,11 +119,22 @@ The upstream `ansible-tmm/aiops-summitlab` repo has:
 
 ## Lab Sections and Demo Entry Points
 
-| Section | Demo trigger | EDA/workflow |
-|---------|-------------|--------------|
-| Apache AIOps | Run "❌ Break Apache" | Web App rulebook → AI Insights workflow |
-| Network AIOps | SSH cisco-rtr1, shut tunnel0 | ospf-neighbor Splunk alert → OSPF Neighbor rulebook → Network-AIOps-Workflow |
-| Windows AIOps | Launch "Simulate AD Account Creation" or "Simulate Windows Firewall Toggle" | Windows Events rulebook → "Windows: Create Mattermost Ticket" or "Windows AI: Analyze and Ticket" |
+| Showroom Section | Demo trigger | EDA/workflow |
+|-----------------|-------------|--------------|
+| Part 1: AIOps with Apache Remediation | Run "❌ Break Apache" | Web App rulebook → AI Insights workflow |
+| Part 2: AIOps with Network Automation | SSH cisco-rtr1, shut tunnel0 | ospf-neighbor Splunk alert → OSPF Neighbor rulebook → Network-AIOps-Workflow |
+| Part 3: AIOps with Windows Automation | Launch "Simulate AD Account Creation" or "Simulate Windows Firewall Toggle" | Windows Events rulebook → "Windows: Create Mattermost Ticket" or "Windows AI: Analyze and Ticket" |
+
+## Claude Code Skills
+
+Three slash commands in `.claude/commands/` automate the common workflows. They read credentials
+from `docs/dev-environment.md` automatically — no manual `export` needed:
+
+| Command | What it does |
+|---------|-------------|
+| `/aiops-preflight` | Validates AAP + Splunk + EDA are ready before a demo |
+| `/aiops-setup` | Runs preflight + all three phase setup playbooks in sequence |
+| `/aiops-reset` | Resets all three phases to known-good state between sessions |
 
 ## Conventions
 
