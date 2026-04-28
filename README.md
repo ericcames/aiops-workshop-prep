@@ -2,6 +2,15 @@
 
 Automates the setup of the [ansible-tmm/aiops-summitlab](https://github.com/ansible-tmm/aiops-summitlab) AIOps workshop so each demo section is ready to run without manual steps.
 
+## RHDP Catalog Item
+
+Order this item from the Red Hat Demo Platform before running anything here:
+
+> **Introduction to AI-Driven Ansible Automation: Self-healing, Observability-Driven AIOps**
+> (provided by RHDP)
+
+Once provisioned, collect the URLs and credentials from the RHDP instance details page and populate `docs/dev-environment.md` (see [Prerequisites](#prerequisites)).
+
 ## Upstream Dependency
 
 This repo targets a running instance of the upstream lab. The upstream repo must be deployed to your RHDP environment before running anything here.
@@ -11,16 +20,30 @@ This repo targets a running instance of the upstream lab. The upstream repo must
 | **Upstream repo** | https://github.com/ansible-tmm/aiops-summitlab |
 | **Description** | Summit 2025 AIOps Lab — source of all job templates, rulebooks, and playbooks |
 
+## Workshop Module Map
+
+| Showroom Module | Phase | Demo trigger | What happens |
+|----------------|-------|-------------|--------------|
+| Apache AIOps | Phase 1 | Run "❌ Break Apache" in AAP | EDA Web App rulebook → AI Insights workflow → Lightspeed remediation → auto-fix |
+| Network AIOps | Phase 2 | SSH cisco-rtr1, `shut tunnel0` | Syslog → Splunk ospf-neighbor alert → EDA OSPF Neighbor rulebook → Network-AIOps-Workflow |
+| Windows AIOps | Phase 3 | Launch "Simulate AD Account Creation" or "Simulate Windows Firewall Toggle" | Windows Events EDA rulebook → Mattermost ticket or AI-enriched ticket |
+
 ## Prerequisites
 
-- A running RHDP AIOps workshop environment
+- RHDP AIOps workshop environment provisioned (see [RHDP Catalog Item](#rhdp-catalog-item) above)
 - Ansible installed locally
 - Collections installed (requires Automation Hub token in `~/.ansible/ansible.cfg`):
   ```bash
   ANSIBLE_CONFIG=~/.ansible/ansible.cfg \
     ansible-galaxy collection install -r collections/requirements.yml -p ./collections
   ```
-- Credentials populated in `docs/dev-environment.md` (gitignored — never commit)
+- Credentials populated in `docs/dev-environment.md` (gitignored — never commit):
+  ```bash
+  cp docs/dev-environment.md.example docs/dev-environment.md
+  # edit docs/dev-environment.md with your RHDP instance values
+  ```
+
+See [docs/troubleshooting.md](docs/troubleshooting.md) if anything fails.
 
 ## Environment Variables
 

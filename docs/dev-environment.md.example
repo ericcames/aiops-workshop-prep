@@ -1,0 +1,66 @@
+# Dev Environment — RHDP Instance Template
+
+Copy this file to `docs/dev-environment.md` and fill in the values from your RHDP deployment.
+`docs/dev-environment.md` is gitignored — never commit it.
+
+## RHDP Catalog Item
+
+**Introduction to AI-Driven Ansible Automation: Self-healing, Observability-Driven AIOps**
+(provided by RHDP)
+
+Order from the RHDP catalog, wait for provisioning to complete, then collect the URLs and
+credentials from the RHDP instance details page.
+
+---
+
+## AAP
+
+- **URL:** https://controller-<id>.apps.<cluster>.rhdp.net
+- **Username:** admin
+- **Password:** <aap-password>
+
+## Mattermost
+
+- **URL:** https://mattermost-<id>.apps.<cluster>.rhdp.net
+- **Username:** ansibleadmin@ansible.com
+- **Password:** <mattermost-password>
+- **Team:** Automators
+- **Channel:** Town Square
+
+## Gitea
+
+- **URL:** https://gitea-<id>.apps.<cluster>.rhdp.net
+- **Username:** lab-user
+- **Password:** <gitea-password>
+
+## Splunk
+
+- **URL:** https://splunk-<id>.apps.<cluster>.rhdp.net
+- **Username:** admin
+- **Password:** <splunk-password>
+- **API Token:** (not used by playbooks — web auth flow is used instead)
+
+## SSH Bastion
+
+- **Host:** ssh.<cluster>.rhdp.net
+- **Port:** <bastion-port>
+- **Username:** lab-user
+- **Password:** <bastion-password>
+- **Login:** `ssh lab-user@ssh.<cluster>.rhdp.net -p <bastion-port>`
+
+## SSH (cisco-rtr1 — via bastion)
+
+- **Internal IP:** <cisco-rtr1-internal-ip>
+- **Username:** admin
+- **Password:** <cisco-password>
+- **Login:** `ssh -J lab-user@ssh.<cluster>.rhdp.net:<bastion-port> admin@<cisco-rtr1-internal-ip>`
+
+## EDA Webhook
+
+- **URL:** https://eda-webhook-<id>.apps.<cluster>.rhdp.net
+
+## AI Inference (LiteLLM / Granite 3.2)
+
+- **Endpoint:** https://litellm-prod.apps.maas.redhatworkshops.io/v1/completions
+- **Model:** openai/granite-3-2-8b-instruct
+- **Token:** stored in AAP credential — do not paste here
