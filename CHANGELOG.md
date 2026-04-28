@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 - `.claude/commands/aiops-setup.md`, `aiops-preflight.md`, `aiops-reset.md` — add Splunk API token to credential collection prompt and `docs/dev-environment.md` template
 
 ### Fixed
-- `setup_phase1_apache.yml` — remove "Create Remediation Workflow" task (fixes issue #15): the Remediation Workflow is populated mid-demo by the AI Insights workflow, not at setup time; trying to pre-populate it fails on fresh RHDP instances where \`🧠 Lightspeed Remediation Playbook Generator\` does not yet exist
+- `setup_phase1_apache.yml` — create `🧠 Lightspeed Remediation Playbook Generator` job template before creating the Remediation Workflow (fixes issue #15): the template does not exist on a fresh RHDP instance and must be created pointing at the `AI-EDA` project before the workflow nodes can reference it
 
 ### Docs (issue #7)
 - `images/rhdp-catalog-item.png` — screenshot of the RHDP catalog item embedded in README
