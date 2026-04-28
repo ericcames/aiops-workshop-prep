@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Docs (issue #7)
 - `images/rhdp-catalog-item.png` — screenshot of the RHDP catalog item embedded in README
-- `README.md` — Getting Started section (Step 1 order catalog item → Step 2 clone + `claude .` → Step 3 populate credentials → Step 4 `/aiops-setup`); correct showroom section names to Part 1/2/3
+- `README.md` — Getting Started section simplified to 3 steps (order → clone + `claude .` → `/aiops-setup`); Claude handles credential collection automatically; correct showroom section names to Part 1/2/3
+- `.claude/commands/aiops-preflight.md`, `aiops-setup.md`, `aiops-reset.md` — if `docs/dev-environment.md` is missing, ask the user for RHDP credentials and create the file automatically instead of stopping with an error
 - `docs/dev-environment.md.example` — template with all required fields and placeholder values
 - `docs/troubleshooting.md` — 10 common failure modes with diagnosis and fix steps
 - `README.md` — add RHDP catalog item name, workshop module map, `dev-environment.md.example` setup step, link to troubleshooting guide
