@@ -128,7 +128,6 @@ or timeout on the reset task.
 |-------|-----|
 | Wrong `BASTION_HOST` / `BASTION_PORT` | Re-check from RHDP instance details — format is `ssh.<cluster>.rhdp.net` / port number |
 | Wrong `BASTION_PASSWORD` | Verify from RHDP instance details |
-| Wrong `NETWORK_HOST` | Use the internal IP shown in RHDP for cisco-rtr1, not the hostname |
 | RHDP instance expired | Extend or re-provision |
 
 **Test the bastion manually:**
@@ -142,7 +141,7 @@ sshpass -p '<bastion-password>' ssh -p <port> -o StrictHostKeyChecking=no \
 sshpass -p '<cisco-password>' ssh \
   -o "ProxyCommand=sshpass -p '<bastion-password>' ssh -p <port> -o StrictHostKeyChecking=no lab-user@<bastion-host> -W %h:%p" \
   -o StrictHostKeyChecking=no \
-  admin@<cisco-rtr1-internal-ip> "show ip interface brief tunnel0"
+  admin@cisco-rtr1 "show ip interface brief tunnel0"
 ```
 
 ---

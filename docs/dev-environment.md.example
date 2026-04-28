@@ -49,13 +49,6 @@ credentials from the RHDP instance details page.
 - **Password:** <bastion-password>
 - **Login:** `ssh lab-user@ssh.<cluster>.rhdp.net -p <bastion-port>`
 
-## SSH (cisco-rtr1 — via bastion)
-
-- **Internal IP:** <cisco-rtr1-internal-ip>
-- **Username:** admin
-- **Password:** <cisco-password>
-- **Login:** `ssh -J lab-user@ssh.<cluster>.rhdp.net:<bastion-port> admin@<cisco-rtr1-internal-ip>`
-
 ## EDA Webhook
 
 - **URL:** https://eda-webhook-<id>.apps.<cluster>.rhdp.net
