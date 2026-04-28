@@ -119,11 +119,11 @@ The upstream `ansible-tmm/aiops-summitlab` repo has:
 
 ## Lab Sections and Demo Entry Points
 
-| Section | Demo trigger | EDA/workflow |
-|---------|-------------|--------------|
-| Apache AIOps | Run "❌ Break Apache" | Web App rulebook → AI Insights workflow |
-| Network AIOps | SSH cisco-rtr1, shut tunnel0 | ospf-neighbor Splunk alert → OSPF Neighbor rulebook → Network-AIOps-Workflow |
-| Windows AIOps | Launch "Simulate AD Account Creation" or "Simulate Windows Firewall Toggle" | Windows Events rulebook → "Windows: Create Mattermost Ticket" or "Windows AI: Analyze and Ticket" |
+| Showroom Section | Demo trigger | EDA/workflow |
+|-----------------|-------------|--------------|
+| Part 1: AIOps with Apache Remediation | Run "❌ Break Apache" | Web App rulebook → AI Insights workflow |
+| Part 2: AIOps with Network Automation | SSH cisco-rtr1, shut tunnel0 | ospf-neighbor Splunk alert → OSPF Neighbor rulebook → Network-AIOps-Workflow |
+| Part 3: AIOps with Windows Automation | Launch "Simulate AD Account Creation" or "Simulate Windows Firewall Toggle" | Windows Events rulebook → "Windows: Create Mattermost Ticket" or "Windows AI: Analyze and Ticket" |
 
 ## Claude Code Skills
 

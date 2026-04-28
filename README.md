@@ -2,14 +2,37 @@
 
 Automates the setup of the [ansible-tmm/aiops-summitlab](https://github.com/ansible-tmm/aiops-summitlab) AIOps workshop so each demo section is ready to run without manual steps.
 
-## RHDP Catalog Item
+## Getting Started
 
-Order this item from the Red Hat Demo Platform before running anything here:
+**Step 1 — Order the RHDP catalog item:**
+
+![RHDP Catalog Item](images/rhdp-catalog-item.png)
 
 > **Introduction to AI-Driven Ansible Automation: Self-healing, Observability-Driven AIOps**
 > (provided by RHDP)
 
-Once provisioned, collect the URLs and credentials from the RHDP instance details page and populate `docs/dev-environment.md` (see [Prerequisites](#prerequisites)).
+**Step 2 — Clone this repo and open it in Claude Code:**
+
+```bash
+git clone https://github.com/ericcames/aiops-workshop-prep.git
+cd aiops-workshop-prep
+claude .
+```
+
+**Step 3 — Populate your credentials:**
+
+```bash
+cp docs/dev-environment.md.example docs/dev-environment.md
+# edit docs/dev-environment.md with the URLs and passwords from your RHDP instance details page
+```
+
+**Step 4 — Run setup:**
+
+```
+/aiops-setup
+```
+
+See [Prerequisites](#prerequisites) for manual setup without Claude Code.
 
 ## Upstream Dependency
 
@@ -22,11 +45,11 @@ This repo targets a running instance of the upstream lab. The upstream repo must
 
 ## Workshop Module Map
 
-| Showroom Module | Phase | Demo trigger | What happens |
-|----------------|-------|-------------|--------------|
-| Apache AIOps | Phase 1 | Run "❌ Break Apache" in AAP | EDA Web App rulebook → AI Insights workflow → Lightspeed remediation → auto-fix |
-| Network AIOps | Phase 2 | SSH cisco-rtr1, `shut tunnel0` | Syslog → Splunk ospf-neighbor alert → EDA OSPF Neighbor rulebook → Network-AIOps-Workflow |
-| Windows AIOps | Phase 3 | Launch "Simulate AD Account Creation" or "Simulate Windows Firewall Toggle" | Windows Events EDA rulebook → Mattermost ticket or AI-enriched ticket |
+| Showroom Section | Demo trigger | What happens |
+|-----------------|-------------|--------------|
+| Part 1: AIOps with Apache Remediation | Run "❌ Break Apache" in AAP | EDA Web App rulebook → AI Insights workflow → Lightspeed remediation → auto-fix |
+| Part 2: AIOps with Network Automation | SSH cisco-rtr1, `shut tunnel0` | Syslog → Splunk ospf-neighbor alert → EDA OSPF Neighbor rulebook → Network-AIOps-Workflow |
+| Part 3: AIOps with Windows Automation | Launch "Simulate AD Account Creation" or "Simulate Windows Firewall Toggle" | Windows Events EDA rulebook → Mattermost ticket or AI-enriched ticket |
 
 ## Prerequisites
 
@@ -99,11 +122,11 @@ cp -r inventories/rhdp-sample/ inventories/rhdp-<customer>/
 
 ## Phases
 
-| Phase | Section | Status | What it automates |
+| Phase | Showroom Section | Status | What it automates |
 |---|---|---|---|
-| Phase 1 | Apache AIOps | ✅ Tested | Builds AI Insights and Remediation workflows |
-| Phase 2 | Network AIOps | ✅ Tested | Splunk TCP input, Network Router Setup job, Splunk alert → EDA webhook |
-| Phase 3 | Windows AIOps | ✅ Tested | Verifies Windows job templates and EDA activation |
+| Phase 1 | Part 1: AIOps with Apache Remediation | ✅ Tested | Builds AI Insights and Remediation workflows |
+| Phase 2 | Part 2: AIOps with Network Automation | ✅ Tested | Splunk TCP input, Network Router Setup job, Splunk alert → EDA webhook |
+| Phase 3 | Part 3: AIOps with Windows Automation | ✅ Tested | Verifies Windows job templates and EDA activation |
 
 ## Claude Code Skills
 
