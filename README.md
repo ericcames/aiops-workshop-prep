@@ -46,6 +46,8 @@ This repo targets a running instance of the upstream lab. The upstream repo must
 | Part 2: AIOps with Network Automation | SSH cisco-rtr1, `shut tunnel0` | Syslog → Splunk ospf-neighbor alert → EDA OSPF Neighbor rulebook → Network-AIOps-Workflow |
 | Part 3: AIOps with Windows Automation | Launch "Simulate AD Account Creation" or "Simulate Windows Firewall Toggle" | Windows Events EDA rulebook → Mattermost ticket or AI-enriched ticket |
 
+> **Part 2 note:** `/aiops-setup` will ask for a Splunk API token during credential collection (Splunk UI → Settings → Tokens → New Token). This is the only step that requires a manual UI action. Automation is tracked in [issue #1](https://github.com/ericcames/aiops-workshop-prep/issues/1).
+
 ## Prerequisites
 
 - RHDP AIOps workshop environment provisioned (see [RHDP Catalog Item](#rhdp-catalog-item) above)

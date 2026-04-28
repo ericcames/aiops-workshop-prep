@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Docs
+- `README.md` — move Splunk API token collection into `/aiops-setup` skill; simplify module map to a single note referencing issue #1
+- `docs/dev-environment.md.example` — clarify Splunk API Token field is collected by `/aiops-setup` during credential collection
+- `CLAUDE.md` — add issue #1 to open issues table (replaces closed duplicate #13)
+- `.claude/commands/aiops-setup.md`, `aiops-preflight.md`, `aiops-reset.md` — add Splunk API token to credential collection prompt and `docs/dev-environment.md` template
+
 ### Docs (issue #7)
 - `images/rhdp-catalog-item.png` — screenshot of the RHDP catalog item embedded in README
 - `README.md` — Getting Started section simplified to 3 steps (order → clone + `claude .` → `/aiops-setup`); Claude handles credential collection automatically; correct showroom section names to Part 1/2/3

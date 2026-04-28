@@ -38,7 +38,8 @@ credentials from the RHDP instance details page.
 - **URL:** https://splunk-<id>.apps.<cluster>.rhdp.net
 - **Username:** admin
 - **Password:** <splunk-password>
-- **API Token:** (not used by playbooks — web auth flow is used instead)
+- **API Token:** <splunk-api-token>
+  (created manually in Splunk UI: Settings → Tokens → New Token — first step of Part 2; see issue #1 for automation)
 
 ## SSH Bastion
 
