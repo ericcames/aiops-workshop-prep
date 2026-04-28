@@ -15,7 +15,7 @@ Track work items at https://github.com/ericcames/aiops-workshop-prep/issues
 
 | # | Title | Priority |
 |---|-------|----------|
-| #13 | Automate Splunk API token creation for Part 2 setup | Medium |
+| #1 | SSH tunnel to Splunk port 8089 — eliminates web auth CSRF workaround and enables token automation | Medium |
 | #5 | validate_certs: false — should validate in prod | Low |
 | #6 | SSH host key checking disabled — should use known_hosts | Low |
 

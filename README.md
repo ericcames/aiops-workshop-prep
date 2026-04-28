@@ -56,7 +56,7 @@ Part 2 begins with this one-time manual step (once per RHDP instance):
 4. Copy the token value
 5. Tell Claude the token — it will save it to `docs/dev-environment.md`
 
-> **Note:** Automating this step is tracked in [issue #13](https://github.com/ericcames/aiops-workshop-prep/issues/13).
+> **Note:** Automating this step is tracked in [issue #1](https://github.com/ericcames/aiops-workshop-prep/issues/1) — once an SSH tunnel to Splunk port 8089 is available, token creation can be done via the REST API and this manual step goes away.
 
 ## Prerequisites
 

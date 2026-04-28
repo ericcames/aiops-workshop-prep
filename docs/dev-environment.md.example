@@ -39,7 +39,7 @@ credentials from the RHDP instance details page.
 - **Username:** admin
 - **Password:** <splunk-password>
 - **API Token:** <splunk-api-token>
-  (created manually in Splunk UI: Settings → Tokens → New Token — first step of Part 2; see issue #13 for automation)
+  (created manually in Splunk UI: Settings → Tokens → New Token — first step of Part 2; see issue #1 for automation)
 
 ## SSH Bastion
 
