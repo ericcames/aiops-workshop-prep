@@ -10,6 +10,9 @@ All notable changes to this project will be documented in this file.
 - `CLAUDE.md` — add issue #1 to open issues table (replaces closed duplicate #13)
 - `.claude/commands/aiops-setup.md`, `aiops-preflight.md`, `aiops-reset.md` — add Splunk API token to credential collection prompt and `docs/dev-environment.md` template
 
+### Fixed
+- `setup_phase1_apache.yml` — remove "Create Remediation Workflow" task (fixes issue #15): the Remediation Workflow is populated mid-demo by the AI Insights workflow, not at setup time; trying to pre-populate it fails on fresh RHDP instances where \`🧠 Lightspeed Remediation Playbook Generator\` does not yet exist
+
 ### Docs (issue #7)
 - `images/rhdp-catalog-item.png` — screenshot of the RHDP catalog item embedded in README
 - `README.md` — Getting Started section simplified to 3 steps (order → clone + `claude .` → `/aiops-setup`); Claude handles credential collection automatically; correct showroom section names to Part 1/2/3
