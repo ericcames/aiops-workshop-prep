@@ -40,11 +40,23 @@ This repo targets a running instance of the upstream lab. The upstream repo must
 
 ## Workshop Module Map
 
-| Showroom Section | Demo trigger | What happens |
-|-----------------|-------------|--------------|
-| Part 1: AIOps with Apache Remediation | Run "❌ Break Apache" in AAP | EDA Web App rulebook → AI Insights workflow → Lightspeed remediation → auto-fix |
-| Part 2: AIOps with Network Automation | SSH cisco-rtr1, `shut tunnel0` | Syslog → Splunk ospf-neighbor alert → EDA OSPF Neighbor rulebook → Network-AIOps-Workflow |
-| Part 3: AIOps with Windows Automation | Launch "Simulate AD Account Creation" or "Simulate Windows Firewall Toggle" | Windows Events EDA rulebook → Mattermost ticket or AI-enriched ticket |
+| Showroom Section | Pre-demo step | Demo trigger | What happens |
+|-----------------|--------------|-------------|--------------|
+| Part 1: AIOps with Apache Remediation | — | Run "❌ Break Apache" in AAP | EDA Web App rulebook → AI Insights workflow → Lightspeed remediation → auto-fix |
+| Part 2: AIOps with Network Automation | Create Splunk API token (see below) | SSH cisco-rtr1, `shut tunnel0` | Syslog → Splunk ospf-neighbor alert → EDA OSPF Neighbor rulebook → Network-AIOps-Workflow |
+| Part 3: AIOps with Windows Automation | — | Launch "Simulate AD Account Creation" or "Simulate Windows Firewall Toggle" | Windows Events EDA rulebook → Mattermost ticket or AI-enriched ticket |
+
+### Part 2 pre-demo: Create a Splunk API token
+
+Part 2 begins with this one-time manual step (once per RHDP instance):
+
+1. Log into Splunk at the URL from your RHDP instance details page
+2. Go to **Settings → Tokens**
+3. Click **New Token** — give it any name (e.g. `aiops-workshop`)
+4. Copy the token value
+5. Tell Claude the token — it will save it to `docs/dev-environment.md`
+
+> **Note:** Automating this step is tracked in [issue #13](https://github.com/ericcames/aiops-workshop-prep/issues/13).
 
 ## Prerequisites
 
