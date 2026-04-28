@@ -27,7 +27,7 @@
               -o "ProxyCommand=sshpass -f {{ bastion_pass_file.path }} ssh -p {{ bastion_port }} -o StrictHostKeyChecking=no {{ bastion_user }}@{{ bastion_host }} -W %h:%p" \
               -o StrictHostKeyChecking=no \
               -o ConnectTimeout=30 \
-              {{ network_username }}@{{ network_host }}
+              {{ network_username }}@cisco-rtr1
           environment:
             SSHPASS: "{{ network_password }}"
           no_log: true

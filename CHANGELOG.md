@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+- `playbooks/reset_phase2_network.yml` — hardcode `cisco-rtr1` hostname instead of requiring `NETWORK_HOST` env var; bastion resolves it internally via ProxyCommand
+- `inventories/rhdp-sample/group_vars/all.yml` — remove `network_host` variable; default `network_password` to `ansible123!`
+- `.claude/commands/aiops-reset.md`, `aiops-setup.md` — remove Cisco router IP from credential collection; it is no longer needed
+
 ### Docs
 - `README.md` — move Splunk API token collection into `/aiops-setup` skill; simplify module map to a single note referencing issue #1
 - `docs/dev-environment.md.example` — clarify Splunk API Token field is collected by `/aiops-setup` during credential collection

@@ -26,9 +26,6 @@ If the file is missing, tell the user you'll help create it and ask them to prov
 - SSH Bastion host (e.g. `ssh.cluster.rhdp.net`)
 - SSH Bastion port (a 5-digit number)
 - SSH Bastion password (username is always `lab-user`)
-- Cisco router internal IP (e.g. `10.x.x.x`)
-- Cisco router password (username is always `admin`)
-
 Once the user provides the values, write `docs/dev-environment.md` with this exact format, substituting the actual values:
 
 ```
@@ -60,12 +57,6 @@ This file is gitignored. Never commit it.
 - **Port:** <bastion-port>
 - **Username:** lab-user
 - **Password:** <bastion-password>
-
-## SSH (cisco-rtr1 — via bastion)
-
-- **Internal IP:** <cisco-internal-ip>
-- **Username:** admin
-- **Password:** <cisco-password>
 ```
 
 Confirm the file was written, then proceed to Step 2.
@@ -87,11 +78,8 @@ Read `docs/dev-environment.md` and extract credentials using this table, then ru
 | `BASTION_PORT` | `## SSH Bastion` | `Port` |
 | `BASTION_USER` | `## SSH Bastion` | `Username` |
 | `BASTION_PASSWORD` | `## SSH Bastion` | `Password` |
-| `NETWORK_HOST` | `## SSH (cisco-rtr1 — via bastion)` | `Internal IP` |
-| `NETWORK_USERNAME` | `## SSH (cisco-rtr1 — via bastion)` | `Username` |
-| `NETWORK_PASSWORD` | `## SSH (cisco-rtr1 — via bastion)` | `Password` |
 
-> **Note — Phase 2 reset:** `reset_phase2_network.yml` reconnects tunnel0 on cisco-rtr1 via the SSH bastion. It requires `BASTION_HOST`, `BASTION_PORT`, `BASTION_USER`, and `BASTION_PASSWORD` to be set correctly.
+> **Note — Phase 2 reset:** `reset_phase2_network.yml` reconnects tunnel0 on cisco-rtr1 via the SSH bastion. The hostname `cisco-rtr1` is resolved by the bastion; no IP needed. Cisco router password defaults to `ansible123!` — override with `NETWORK_PASSWORD` env var if needed.
 
 ```bash
 python3 << 'EOF'
@@ -121,9 +109,6 @@ env = {**os.environ,
     'BASTION_PORT':        get('SSH Bastion', 'Port'),
     'BASTION_USER':        get('SSH Bastion', 'Username'),
     'BASTION_PASSWORD':    get('SSH Bastion', 'Password'),
-    'NETWORK_HOST':        get('SSH (cisco-rtr1 — via bastion)', 'Internal IP'),
-    'NETWORK_USERNAME':    get('SSH (cisco-rtr1 — via bastion)', 'Username'),
-    'NETWORK_PASSWORD':    get('SSH (cisco-rtr1 — via bastion)', 'Password'),
 }
 
 steps = [

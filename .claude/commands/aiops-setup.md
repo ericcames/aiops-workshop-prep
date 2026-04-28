@@ -26,8 +26,6 @@ If the file is missing, tell the user you'll help create it and ask them to prov
 - SSH Bastion host (e.g. `ssh.cluster.rhdp.net`)
 - SSH Bastion port (a 5-digit number)
 - SSH Bastion password (username is always `lab-user`)
-- Cisco router internal IP (e.g. `10.x.x.x`)
-- Cisco router password (username is always `admin`)
 
 Once the user provides the values, write `docs/dev-environment.md` with this exact format, substituting the actual values:
 
@@ -60,12 +58,6 @@ This file is gitignored. Never commit it.
 - **Port:** <bastion-port>
 - **Username:** lab-user
 - **Password:** <bastion-password>
-
-## SSH (cisco-rtr1 — via bastion)
-
-- **Internal IP:** <cisco-internal-ip>
-- **Username:** admin
-- **Password:** <cisco-password>
 ```
 
 Confirm the file was written, then proceed to Step 2.
