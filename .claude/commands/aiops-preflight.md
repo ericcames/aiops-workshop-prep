@@ -21,6 +21,7 @@ If the file is missing, tell the user you'll help create it and ask them to prov
 - AAP password (username is always `admin`)
 - Splunk URL (e.g. `https://splunk-xxxx.apps.cluster.rhdp.net`)
 - Splunk password (username is always `admin`)
+- Splunk API token (Splunk UI → Settings → Tokens → New Token — needed for Part 2 demo)
 - EDA Webhook URL (e.g. `https://eda-webhook-xxxx.apps.cluster.rhdp.net`)
 - SSH Bastion host (e.g. `ssh.cluster.rhdp.net`)
 - SSH Bastion port (a 5-digit number)
@@ -46,6 +47,8 @@ This file is gitignored. Never commit it.
 - **URL:** <splunk-url>
 - **Username:** admin
 - **Password:** <splunk-password>
+- **API Token:** <splunk-api-token>
+  (not used by setup playbooks — for Part 2 demo reference; see issue #1 to automate)
 
 ## EDA Webhook
 
