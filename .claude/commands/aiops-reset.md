@@ -9,15 +9,63 @@ Resets all three workshop phases to a known-good state. Run between customer ses
 
 ## Step 1 — Check Credentials File
 
-Verify `docs/dev-environment.md` exists:
-
 ```bash
-test -f docs/dev-environment.md && echo "✅ docs/dev-environment.md found" || echo "❌ docs/dev-environment.md not found"
+test -f docs/dev-environment.md && echo "found" || echo "missing"
 ```
 
-If the file does not exist, stop and tell the user:
+If the file exists, proceed to Step 2.
 
-> ❌ docs/dev-environment.md not found. Copy docs/dev-environment.md.example and fill in your RHDP instance credentials before running reset.
+If the file is missing, tell the user you'll help create it and ask them to provide all of the following values in one reply (they can find these on their RHDP instance details page):
+
+- AAP URL (e.g. `https://controller-xxxx.apps.cluster.rhdp.net`)
+- AAP password (username is always `admin`)
+- Splunk URL (e.g. `https://splunk-xxxx.apps.cluster.rhdp.net`)
+- Splunk password (username is always `admin`)
+- EDA Webhook URL (e.g. `https://eda-webhook-xxxx.apps.cluster.rhdp.net`)
+- SSH Bastion host (e.g. `ssh.cluster.rhdp.net`)
+- SSH Bastion port (a 5-digit number)
+- SSH Bastion password (username is always `lab-user`)
+- Cisco router internal IP (e.g. `10.x.x.x`)
+- Cisco router password (username is always `admin`)
+
+Once the user provides the values, write `docs/dev-environment.md` with this exact format, substituting the actual values:
+
+```
+# Dev Environment — Current RHDP Instance
+
+This file is gitignored. Never commit it.
+
+## AAP
+
+- **URL:** <aap-url>
+- **Username:** admin
+- **Password:** <aap-password>
+
+## Splunk
+
+- **URL:** <splunk-url>
+- **Username:** admin
+- **Password:** <splunk-password>
+
+## EDA Webhook
+
+- **URL:** <eda-webhook-url>
+
+## SSH Bastion
+
+- **Host:** <bastion-host>
+- **Port:** <bastion-port>
+- **Username:** lab-user
+- **Password:** <bastion-password>
+
+## SSH (cisco-rtr1 — via bastion)
+
+- **Internal IP:** <cisco-internal-ip>
+- **Username:** admin
+- **Password:** <cisco-password>
+```
+
+Confirm the file was written, then proceed to Step 2.
 
 ## Step 2 — Run All Reset Playbooks
 

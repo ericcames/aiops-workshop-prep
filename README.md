@@ -19,18 +19,13 @@ cd aiops-workshop-prep
 claude .
 ```
 
-**Step 3 — Populate your credentials:**
-
-```bash
-cp docs/dev-environment.md.example docs/dev-environment.md
-# edit docs/dev-environment.md with the URLs and passwords from your RHDP instance details page
-```
-
-**Step 4 — Run setup:**
+**Step 3 — Run setup:**
 
 ```
 /aiops-setup
 ```
+
+Claude will ask for your RHDP credentials, create `docs/dev-environment.md`, and run all three phase setup playbooks in sequence.
 
 See [Prerequisites](#prerequisites) for manual setup without Claude Code.
 
