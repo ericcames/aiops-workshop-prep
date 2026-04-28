@@ -19,5 +19,10 @@ bastion_port: "{{ lookup('env', 'BASTION_PORT') | default('22') }}"
 bastion_user: "{{ lookup('env', 'BASTION_USER') | default('lab-user') }}"
 bastion_password: "{{ lookup('env', 'BASTION_PASSWORD') }}"
 
+# Cisco router (required for Phase 2 reset — accessed via bastion)
+network_host:     "{{ lookup('env', 'NETWORK_HOST') }}"
+network_username: "{{ lookup('env', 'NETWORK_USERNAME') | default('admin') }}"
+network_password: "{{ lookup('env', 'NETWORK_PASSWORD') }}"
+
 # Workshop defaults
 organization: "Default"

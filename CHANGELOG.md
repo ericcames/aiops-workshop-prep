@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+- `reset_phase2_network.yml` — replace `ansible.netcommon.cli_config` (Paramiko fails to handle ProxyCommand and cannot resolve internal hostname `cisco-rtr1`) with `ansible.builtin.shell` + `sshpass -e` piping IOS config commands directly over SSH via the bastion ProxyCommand (fixes issue #9)
+- `inventories/rhdp-sample/group_vars/all.yml` — add `network_host`, `network_username`, `network_password` env var lookups (required for Phase 2 reset)
+- `.claude/commands/aiops-reset.md` — extract `NETWORK_HOST`, `NETWORK_USERNAME`, `NETWORK_PASSWORD` from `docs/dev-environment.md` before running reset playbooks
+
+### Claude Code Skills
+- `.claude/commands/aiops-preflight.md` — `/aiops-preflight` slash command: reads credentials from `docs/dev-environment.md` and runs `preflight.yml`
+- `.claude/commands/aiops-setup.md` — `/aiops-setup` slash command: runs preflight + all three phase setup playbooks in sequence, stops on first failure
+- `.claude/commands/aiops-reset.md` — `/aiops-reset` slash command: runs all three reset playbooks in sequence, stops on first failure
+
 ### Added
 - Initial repo scaffold: README, LICENSE, CODE_OF_CONDUCT, CONTRIBUTING, CHANGELOG
 - ansible.cfg, .gitignore, collections/requirements.yml
