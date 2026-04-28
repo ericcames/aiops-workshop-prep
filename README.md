@@ -82,6 +82,18 @@ cp -r inventories/rhdp-sample/ inventories/rhdp-<customer>/
 | Phase 2 | Network AIOps | ✅ Tested | Splunk TCP input, Network Router Setup job, Splunk alert → EDA webhook |
 | Phase 3 | Windows AIOps | ✅ Tested | Verifies Windows job templates and EDA activation |
 
+## Claude Code Skills
+
+If you're using [Claude Code](https://claude.ai/code), three slash commands are available that read credentials automatically from `docs/dev-environment.md`:
+
+| Command | What it does |
+|---------|-------------|
+| `/aiops-preflight` | Validates the environment is ready before a demo |
+| `/aiops-setup` | Runs preflight + all three phase setup playbooks in sequence |
+| `/aiops-reset` | Resets all three phases to known-good state |
+
+No manual `export` of environment variables needed — each command reads `docs/dev-environment.md` directly.
+
 ## License
 
 MIT — see [LICENSE](LICENSE)
